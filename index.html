@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Software for disabled</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <style>
+        #image{
+            height: 30%;
+            width: 25%;
+        }
+        #camdemo{
+            position: absolute;
+            top: 10%;
+            left: 51%;
+            height: 100%;
+            width:100%;
+        }
+        #counter-text
+        {
+            position: absolute;
+            top: 45%;
+            left: 74%;
+            font-size: 650%;
+            color:#42a5f5;
+        }
+        #newimage
+        {
+            height:25%;
+            width:25%;
+            position: absolute;
+            left:3%;
+            top:68%;
+        }
+        #start{
+            position: absolute;
+            left:10%;
+
+        }
+        .row .col.m7 {
+    width: 42.333333%;
+    margin-left: auto;
+    left: auto;
+    right: auto;}
+    </style>        
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper blue lighten-1">
+          <a href="#" class="brand-logo center">Software for disabled</a>
+        </div>
+      </nav>
+<!--card-->
+      <div class="row">
+        <div class="col s12 m7">
+          <div class="card">
+            <div class="card-image">
+              <img src="images/sample.png" id="image">
+            </div>
+            <div class="card-content">
+              <p>I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.</p>
+            </div>
+            <div class="card-action">
+              <a href="#">Next</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="camdemo" style="width: 640px; height: 480px; text-align: center; margin: 0 auto;"></div>
+      <div id="counter-wrapper">
+          <div id="counter-text"></div>
+      </div>
+      <br>
+      <div style="text-align:center;">
+          <a class="waves-effect waves-light btn" id="start">Try now</a>
+      </div>
+      <div id="my_result"></div>
+      <script>
+            var enabled = false;
+// Use require to add webcamjs
+var WebCamera = require("webcamjs");
+
+var Counter = function(){
+    this.count = 3;
+    this.timeout = null;
+}
+
+Counter.prototype.start = function(){
+    c.timeout = setInterval(c.render,1000);
+}
+
+Counter.prototype.render = function(){
+    if(c.count <= 0 ){
+        clearInterval(c.timeout);
+        WebCamera.snap( function(data_uri) {
+            document.getElementById('my_result').innerHTML = '<img id ="newimage" src="'+data_uri+'"/>';
+            document.getElementById('counter-text').innerText = "";
+        } );
+        document.getElementById("start").innerHTML="Try Again"
+        return;
+    }
+    c.count -= 1;
+    document.getElementById('counter-text').innerText = c.count;
+}
+
+var c = new Counter();
+
+document.getElementById("start").addEventListener('click',function(){
+    
+   if(!enabled){ // Start the camera !
+     enabled = true;
+     c.count = 3;
+     c.start();
+     WebCamera.attach('#camdemo');
+     console.log("The camera has been started");
+   }else{ // Disable the camera !
+    document.getElementById("start").innerHTML="Try Now";
+     enabled = false;
+     WebCamera.reset();
+    console.log("The camera has been disabled");
+    document.getElementById('counter-text').innerText = "";
+   }
+},false);
+      </script>
+</body>
+</html>
