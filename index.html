@@ -36,7 +36,7 @@
             width:25%;
             position: absolute;
             left:3%;
-            top:68%;
+            top:72%;
         }
         #start{
             position: absolute;
@@ -53,7 +53,7 @@
 <body>
     <nav>
         <div class="nav-wrapper blue lighten-1">
-          <a href="#" class="brand-logo center">Software for disabled</a>
+          <a href="#" class="brand-logo center">Learn Sign Language</a>
         </div>
       </nav>
 <!--card-->
@@ -61,11 +61,10 @@
         <div class="col s12 m7">
           <div class="card">
             <div class="card-image">
-              <img src="images/sample.png" id="image">
+              <img src="images/sample2.png" id="image">
             </div>
             <div class="card-content">
-              <p>I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively.</p>
+              <h5>A</h5>
             </div>
             <div class="card-action">
               <a href="#">Next</a>
@@ -101,8 +100,10 @@ Counter.prototype.render = function(){
     if(c.count <= 0 ){
         clearInterval(c.timeout);
         WebCamera.snap( function(data_uri) {
+            sendImage(data_uri);
             document.getElementById('my_result').innerHTML = '<img id ="newimage" src="'+data_uri+'"/>';
             document.getElementById('counter-text').innerText = "";
+            console.log(data_uri);
         } );
         document.getElementById("start").innerHTML="Try Again"
         return;
@@ -129,6 +130,33 @@ document.getElementById("start").addEventListener('click',function(){
     document.getElementById('counter-text').innerText = "";
    }
 },false);
-      </script>
+
+        const {ipcRenderer} = require("electron");
+        $ = require('./jquery.js');
+
+        function sendImage(data){
+
+            //var data = $(this).serialize();
+            $.ajax({
+                url : "http://localhost:5000/upload/",
+                data:{image : data},
+                dataType : "JSON",
+                method : "POST",
+                success:function(e){
+                    if(e.status == true){
+                        alert("login Success");
+                    }else{
+                        alert("login failed");
+                    }
+                }
+            })
+
+            return false;
+        }
+        
+
+
+    </script>
+
 </body>
 </html>
